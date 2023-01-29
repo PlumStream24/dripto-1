@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import NavigationBar from './components/Navbar';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import Vigenere from './pages/vigenere';
+import AutoVigenere from './pages/auto-key-vigenere';
+import ExtVigenere from './pages/ext-vigenere';
+import Affine from './pages/affine';
+import Playfair from './pages/playfair';
+import Hill from './pages/hill';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+    <NavigationBar />
+    <Routes>
+        <Route path='/' element={<Navigate to="/vigenere" />} />
+        <Route path='/vigenere' element={<Vigenere />} />
+        <Route path='/auto-key-vigenere' element={<AutoVigenere/>} />
+        <Route path='/ext-vigenere' element={<ExtVigenere/>} />
+        <Route path='/affine' element={<Affine/>} />
+        <Route path='/playfair' element={<Playfair/>} />
+        <Route path='/hill' element={<Hill/>} />
+    </Routes>
+    </Router>
   );
 }
 
