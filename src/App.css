@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-image: url("./dripto.jpg");
+  background-size: cover;
+}
