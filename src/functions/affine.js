@@ -18,8 +18,7 @@ const gcd = function(a, b) {
 }
 
 const affineEncrypt = function(plainMsg, key_a, key_b) {
-    let isnum = /^\d+$/.test(key_b);
-    if(gcd(key_a, 256)!==1 || !isnum){
+    if(gcd(key_a, 256)!==1 || !(/^\d+$/.test(key_b))){
         return "Error with value a and/or b."
     }
     let cypher = "";
@@ -53,8 +52,7 @@ const extendedEuclidAlgo = function(a, b) {
 }
 
 const affineDecrypt = function(plainMsg, key_a, key_b){
-    let isnum = /^\d+$/.test(key_b);
-    if(gcd(key_a, 256)!==1 || !isnum){
+    if(gcd(key_a, 256)!==1 || !(/^\d+$/.test(key_b))){
         return "Error with value a and/or b."
     }
     let key_a_inverse = extendedEuclidAlgo(key_a, 256);
