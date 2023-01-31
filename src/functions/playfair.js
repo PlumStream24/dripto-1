@@ -50,34 +50,24 @@ const playfairEncrypt = function(plainMsg, key){
         let p1 = playfairIndex(currentLetters[0], playfairTable);
         let p2 = playfairIndex(currentLetters[1], playfairTable);
         if(p1[0] === p2[0]){
-            let x1, x2;
-            if (p1[1]+1 > 4){
+            let x1 = p1[1] + 1;
+            if (x1 > 4){
                 x1 = 0;
             }
-            else {
-                x1 = p1[1] + 1;
-            }
-            if (p2[1]+1 > 4){
+            let x2 = p2[1] + 1;
+            if (x2 > 4){
                 x2 = 0;
-            }
-            else {
-                x2 = p2[1] + 1;
             }
             currentLetters = playfairTable[x1][p1[0]] + playfairTable[x2][p2[0]];
         }
         else if(p1[1] === p2[1]){
-            let y1, y2;
-            if (p1[0]+1 > 4){
+            let y1 = p1[0] + 1;
+            if (y1 > 4){
                 y1 = 0;
             }
-            else {
-                y1 = p1[0] + 1;
-            }
-            if (p2[0]+1 > 4){
+            let y2 = p2[0] + 1;
+            if (y2 > 4){
                 y2 = 0;
-            }
-            else {
-                y2 = p2[0] + 1;
             }
             currentLetters = playfairTable[p1[1]][y1] + playfairTable[p2[1]][y2];
         }
@@ -115,34 +105,24 @@ const playfairDecrypt = function(plainMsg, key){
         let p1 = playfairIndex(currentLetters[0], playfairTable);
         let p2 = playfairIndex(currentLetters[1], playfairTable);
         if(p1[0] === p2[0]){
-            let x1, x2;
-            if (p1[1]-1 < 0){
+            let x1 = p1[1] - 1;
+            if (x1 < 0){
                 x1 = 4;
             }
-            else {
-                x1 = p1[1] - 1;
-            }
-            if (p2[1]-1 < 0){
+            let x2 = p2[1] - 1;
+            if (x2 < 0){
                 x2 = 4;
-            }
-            else {
-                x2 = p2[1] - 1;
             }
             currentLetters = playfairTable[x1][p1[0]] + playfairTable[x2][p2[0]];
         }
         else if(p1[1] === p2[1]){
-            let y1, y2;
-            if (p1[0]-1 < 0){
+            let y1 = p1[0] - 1;
+            if (y1 < 0){
                 y1 = 4;
             }
-            else {
-                y1 = p1[0] - 1;
-            }
+            let y2 = p2[0] - 1;
             if (p2[0]-1 < 0){
                 y2 = 4;
-            }
-            else {
-                y2 = p2[0] - 1;
             }
             currentLetters = playfairTable[p1[1]][y1] + playfairTable[p2[1]][y2];
         }
