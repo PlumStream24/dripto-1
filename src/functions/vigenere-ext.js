@@ -28,4 +28,34 @@ const extVigenereDecrypt = function(cypher, key) {
     return plainMsg;
 }
 
-export {extVigenereDecrypt, extVigenereEncrypt};
+const extVigenereFileEncrypt = function(buffer, key) {
+    let view = new Uint8Array(buffer);
+    let encView = new Uint8Array(buffer);
+
+    for(let i = 0, j = 0; i < view.byteLength; i++) {
+        let currentByte = view[i];
+        let num = (currentByte + key[j%key.length].charCodeAt()) % 256;
+        num = (num + 256) % 256;
+        encView[i] = num;
+        j++;
+    }
+
+    return encView;
+}
+
+const extVigenereFileDecrypt = function(buffer, key) {
+    let view = new Uint8Array(buffer);
+    let encView = new Uint8Array(buffer);
+
+    for(let i = 0, j = 0; i < view.byteLength; i++) {
+        let currentByte = view[i];
+        let num = (currentByte - key[j%key.length].charCodeAt()) % 256;
+        num = (num + 256) % 256;
+        encView[i] = num;
+        j++;
+    }
+
+    return encView;
+}
+
+export {extVigenereDecrypt, extVigenereEncrypt, extVigenereFileDecrypt, extVigenereFileEncrypt};

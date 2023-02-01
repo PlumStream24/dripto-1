@@ -2,7 +2,7 @@ import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {Component, createRef} from 'react';
-import {extVigenereEncrypt, extVigenereDecrypt} from '../functions/vigenere-ext';
+import {extVigenereEncrypt, extVigenereDecrypt, extVigenereFileEncrypt, extVigenereFileDecrypt} from '../functions/vigenere-ext';
 
 class ExtVigenere extends Component {
     constructor(props) {
@@ -24,11 +24,11 @@ class ExtVigenere extends Component {
         } else {
             const fr = new FileReader();
             fr.onload = () => {
-                this.setState({message: fr.result});
-                let cypher = extVigenereEncrypt(fr.result, this.state.key);
+                let cypher = extVigenereFileEncrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                
             }
-            fr.readAsText(this.fileInput.current.files[0]);
+            fr.readAsArrayBuffer(this.fileInput.current.files[0]);
 
         }
         
@@ -41,11 +41,11 @@ class ExtVigenere extends Component {
         } else {
             const fr = new FileReader();
             fr.onload = () => {
-                this.setState({message: fr.result});
-                let cypher = extVigenereDecrypt(fr.result, this.state.key);
+                let cypher = extVigenereFileDecrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+
             }
-            fr.readAsText(this.fileInput.current.files[0]);
+            fr.readAsArrayBuffer(this.fileInput.current.files[0]);
         }
         
     }
@@ -65,11 +65,14 @@ class ExtVigenere extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result],
-                { type: "text/plain;charset=utf-8" });
+        let blob = new Blob([this.state.result]);
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "cypher.txt";
+        if (this.fileInput.current.value == null) {
+            link.download = 'cypher';
+        } else {
+            link.download = this.fileInput.current.files[0].name;
+        }
         link.click();
     }
 
@@ -82,7 +85,7 @@ class ExtVigenere extends Component {
                     <Form.Label>Plain Text / Cypher Text</Form.Label>
                     <Form.Control as="textarea" rows={3} placeholder="" name="message" value={this.state.message} onChange={this.handleInputChange}></Form.Control>
                     <Form.Label>Input File</Form.Label>
-                    <Form.Control type="file" accept=".txt" ref={this.fileInput}/>
+                    <Form.Control type="file" accept="" ref={this.fileInput}/>
                     <Button variant="outline-secondary" size="sm" type="button" onClick={this.clearField} className="mt-1 mb-4">Clear</Button>
                     <br/>
                     <Form.Label>Key</Form.Label>
