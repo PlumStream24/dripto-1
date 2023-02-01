@@ -32,16 +32,14 @@ const playfairEncrypt = function(plainMsg, key){
     plainMsg = plainMsg.toLowerCase().replaceAll("j", "i").replace(lowerAlphabet, "");
     let playfairTable = createPlayfairTable(key);
 
+    if(plainMsg.length % 2 !== 0){
+        plainMsg += "x";
+    }
+
     let cypher = "";
 
     for(let i = 0; i < plainMsg.length; i+=2){
-        let currentLetters = ""
-        if (plainMsg[i+1] === undefined){
-            currentLetters += plainMsg[i]+"x";
-        }
-        else {
-            currentLetters += plainMsg[i]+plainMsg[i+1];
-        }
+        let currentLetters = plainMsg[i]+plainMsg[i+1];
         if (currentLetters[0] === "x" && currentLetters[1] === "x"){
             currentLetters = currentLetters.slice(0,1) + "z"
             i--;
@@ -71,16 +69,14 @@ const playfairDecrypt = function(plainMsg, key){
     plainMsg = plainMsg.toLowerCase().replaceAll("j", "i").replace(lowerAlphabet, "");
     let playfairTable = createPlayfairTable(key);
 
+    if(plainMsg.length % 2 !== 0){
+        plainMsg += "x";
+    }
+
     let cypher = "";
 
     for(let i = 0; i < plainMsg.length; i+=2){
-        let currentLetters = "";
-        if (plainMsg[i+1] === undefined){
-            currentLetters += plainMsg[i]+"x";
-        }
-        else {
-            currentLetters += plainMsg[i]+plainMsg[i+1];
-        }
+        let currentLetters = plainMsg[i]+plainMsg[i+1];
         if (currentLetters[0] === "x" && currentLetters[1] === "x"){
             currentLetters = currentLetters.slice(0,1) + "z"
             i--;
