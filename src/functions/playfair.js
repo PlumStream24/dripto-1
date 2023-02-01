@@ -24,6 +24,10 @@ const playfairIndex= function(letter, table){
     return [x, y];
 }
 
+const absoluteMod = function(n, m) {
+    return ((n % m) + m) % m;
+}
+
 const playfairEncrypt = function(plainMsg, key){
     plainMsg = plainMsg.toLowerCase().replaceAll("j", "i").replace(lowerAlphabet, "");
     let playfairTable = createPlayfairTable(key);
@@ -46,30 +50,14 @@ const playfairEncrypt = function(plainMsg, key){
             currentLetters = currentLetters.slice(0,1) + "x"
             i--;
         }
-        console.log(currentLetters);
+        
         let p1 = playfairIndex(currentLetters[0], playfairTable);
         let p2 = playfairIndex(currentLetters[1], playfairTable);
         if(p1[0] === p2[0]){
-            let x1 = p1[1] + 1;
-            if (x1 > 4){
-                x1 = 0;
-            }
-            let x2 = p2[1] + 1;
-            if (x2 > 4){
-                x2 = 0;
-            }
-            currentLetters = playfairTable[x1][p1[0]] + playfairTable[x2][p2[0]];
+            currentLetters = playfairTable[absoluteMod(p1[1] + 1, 5)][p1[0]] + playfairTable[absoluteMod(p2[1] + 1, 5)][p2[0]];
         }
         else if(p1[1] === p2[1]){
-            let y1 = p1[0] + 1;
-            if (y1 > 4){
-                y1 = 0;
-            }
-            let y2 = p2[0] + 1;
-            if (y2 > 4){
-                y2 = 0;
-            }
-            currentLetters = playfairTable[p1[1]][y1] + playfairTable[p2[1]][y2];
+            currentLetters = playfairTable[p1[1]][absoluteMod(p1[0] + 1, 5)] + playfairTable[p2[1]][absoluteMod(p2[0] + 1, 5)];
         }
         else {
             currentLetters = playfairTable[p1[1]][p2[0]] + playfairTable[p2[1]][p1[0]];
@@ -105,26 +93,10 @@ const playfairDecrypt = function(plainMsg, key){
         let p1 = playfairIndex(currentLetters[0], playfairTable);
         let p2 = playfairIndex(currentLetters[1], playfairTable);
         if(p1[0] === p2[0]){
-            let x1 = p1[1] - 1;
-            if (x1 < 0){
-                x1 = 4;
-            }
-            let x2 = p2[1] - 1;
-            if (x2 < 0){
-                x2 = 4;
-            }
-            currentLetters = playfairTable[x1][p1[0]] + playfairTable[x2][p2[0]];
+            currentLetters = playfairTable[absoluteMod(p1[1] - 1, 5)][p1[0]] + playfairTable[absoluteMod(p2[1] - 1, 5)][p2[0]];
         }
         else if(p1[1] === p2[1]){
-            let y1 = p1[0] - 1;
-            if (y1 < 0){
-                y1 = 4;
-            }
-            let y2 = p2[0] - 1;
-            if (p2[0]-1 < 0){
-                y2 = 4;
-            }
-            currentLetters = playfairTable[p1[1]][y1] + playfairTable[p2[1]][y2];
+            currentLetters = playfairTable[p1[1]][absoluteMod(p1[0] - 1, 5)] + playfairTable[p2[1]][absoluteMod(p2[0] - 1, 5)];
         }
         else {
             currentLetters = playfairTable[p1[1]][p2[0]] + playfairTable[p2[1]][p1[0]];
