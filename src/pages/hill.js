@@ -28,14 +28,14 @@ class Hill extends Component {
 
     handleEncrypt = () => {
         if(this.fileInput.current.files[0] == null) {
-            let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d);
+            let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
             this.setState({result: cypher});
 
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 this.setState({message: fr.result});
-                let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d);
+                let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
                 this.setState({result: cypher});
             }
             fr.readAsText(this.fileInput.current.files[0]);
@@ -46,13 +46,13 @@ class Hill extends Component {
 
     handleDecrypt = () => {
         if(this.fileInput.current.files[0] == null) {
-            let plainMsg = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d);
+            let plainMsg = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
             this.setState({result: plainMsg});
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 this.setState({message: fr.result});
-                let cypher = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d);
+                let cypher = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
                 this.setState({result: cypher});
             }
             fr.readAsText(this.fileInput.current.files[0]);
