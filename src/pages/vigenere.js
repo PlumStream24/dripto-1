@@ -10,7 +10,8 @@ class Vigenere extends Component {
         this.state = {
             message : '',
             key : '',
-            result : ''
+            result : '',
+            spaced: 'no-space'
         }
         this.fileInput = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -32,6 +33,8 @@ class Vigenere extends Component {
 
         }
         
+        this.setState({spaced: 'no-space'});
+
     }
 
     handleDecrypt = () => {
@@ -48,6 +51,8 @@ class Vigenere extends Component {
             fr.readAsText(this.fileInput.current.files[0]);
         }
         
+        this.setState({spaced: 'no-space'});
+        
     }
 
     handleInputChange = (e) => {
@@ -58,6 +63,18 @@ class Vigenere extends Component {
         this.setState({
             [name]: value
         });
+
+        if (name === 'spaced') this.handleSpace(e);
+    }
+
+    handleSpace = (e) => {
+        if (e.target.value === 'spaced') {
+            let r = this.state.result.replace(/(.{5})/g,"$& ");
+            this.setState({result: r});
+        } else {
+            let r = this.state.result.replace(/\s/g,"");
+            this.setState({result: r});
+        }
     }
 
     clearField = () => {
@@ -102,6 +119,12 @@ class Vigenere extends Component {
             
             <Form.Label>Output</Form.Label>
             <Form.Control as="textarea" rows={3} placeholder="" readOnly name="result" value={this.state.result}/>
+            <Container>
+                <Form.Group className="mb-3">                
+                    <Form.Check inline label="No Space" type="radio" value="no-space" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'no-space'}/>
+                    <Form.Check inline label="Spaced" type="radio" value="spaced" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'spaced'}/>
+                </Form.Group>
+            </Container>
             <br/>
             <Button variant="primary" type="button" onClick={this.handleSaveFile}>Download as File</Button>
 
