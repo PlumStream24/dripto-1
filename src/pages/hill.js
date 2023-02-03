@@ -20,7 +20,9 @@ class Hill extends Component {
             key_g : 644,
             key_h : 485,
             key_i : 483,
-            result : ''
+            result : '',
+            fake_result : '',
+            spaced: 'no-space'
         }
         this.fileInput = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -30,6 +32,8 @@ class Hill extends Component {
         if(this.fileInput.current.files[0] == null) {
             let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
             this.setState({result: cypher});
+            this.setState({fake_result: cypher});
+
 
         } else {
             const fr = new FileReader();
@@ -37,23 +41,29 @@ class Hill extends Component {
                 this.setState({message: fr.result});
                 let cypher = hillEncrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
+    
             }
             fr.readAsText(this.fileInput.current.files[0]);
 
         }
-        
+        this.setState({spaced: 'no-space'});
     }
 
     handleDecrypt = () => {
         if(this.fileInput.current.files[0] == null) {
             let plainMsg = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
             this.setState({result: plainMsg});
+            this.setState({fake_result: plainMsg});
+
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 this.setState({message: fr.result});
                 let cypher = hillDecrypt(this.state.message, this.state.key_a, this.state.key_b, this.state.key_c, this.state.key_d, this.state.key_e, this.state.key_f, this.state.key_g, this.state.key_h, this.state.key_i);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
+    
             }
             fr.readAsText(this.fileInput.current.files[0]);
         }
@@ -68,6 +78,17 @@ class Hill extends Component {
         this.setState({
             [name]: value
         });
+
+        if (name === 'spaced') this.handleSpace(e);
+    }
+
+    handleSpace = (e) => {
+        if (e.target.value === 'spaced') {
+            let r = this.state.result.replace(/(.{5})/g,"$& ");
+            this.setState({result: r});
+        } else {
+            this.setState({result: this.state.fake_result});
+        }
     }
 
     clearField = () => {
@@ -75,7 +96,7 @@ class Hill extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result],
+        let blob = new Blob([this.state.fake_result],
                 { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -155,7 +176,12 @@ class Hill extends Component {
             
             <Form.Label>Output</Form.Label>
             <Form.Control as="textarea" rows={3} placeholder="" readOnly name="result" value={this.state.result}/>
-            <br/>
+            <Container>
+                <Form.Group className="mb-3">                
+                    <Form.Check inline label="No Space" type="radio" value="no-space" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'no-space'}/>
+                    <Form.Check inline label="Spaced" type="radio" value="spaced" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'spaced'}/>
+                </Form.Group>
+            </Container><br/>
             <Button variant="primary" type="button" onClick={this.handleSaveFile}>Download as File</Button>
 
             <Container className="mb-5"></Container>

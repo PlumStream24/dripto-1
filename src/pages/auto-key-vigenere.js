@@ -11,6 +11,7 @@ class AutoVigenere extends Component {
             message : '',
             key : '',
             result : '',
+            fake_result : '',
             spaced: 'no-space'
         }
         this.fileInput = createRef();
@@ -21,6 +22,8 @@ class AutoVigenere extends Component {
         if(this.fileInput.current.files[0] == null) {
             let cypher = autoVigenereEncrypt(this.state.message, this.state.key);
             this.setState({result: cypher});
+            this.setState({fake_result: cypher});
+
 
         } else {
             const fr = new FileReader();
@@ -28,6 +31,8 @@ class AutoVigenere extends Component {
                 this.setState({message: fr.result});
                 let cypher = autoVigenereEncrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
+    
             }
             fr.readAsText(this.fileInput.current.files[0]);
 
@@ -41,12 +46,15 @@ class AutoVigenere extends Component {
         if(this.fileInput.current.files[0] == null) {
             let plainMsg = autoVigenereDecrypt(this.state.message, this.state.key);
             this.setState({result: plainMsg});
+            this.setState({fake_result: plainMsg});
+
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 this.setState({message: fr.result});
                 let cypher = autoVigenereDecrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});    
             }
             fr.readAsText(this.fileInput.current.files[0]);
         }
@@ -73,8 +81,7 @@ class AutoVigenere extends Component {
             let r = this.state.result.replace(/(.{5})/g,"$& ");
             this.setState({result: r});
         } else {
-            let r = this.state.result.replace(/\s/g,"");
-            this.setState({result: r});
+            this.setState({result: this.state.fake_result});
         }
     }
 
@@ -83,7 +90,7 @@ class AutoVigenere extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result],
+        let blob = new Blob([this.state.fake_result],
                 { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);

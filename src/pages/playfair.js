@@ -10,7 +10,9 @@ class Playfair extends Component {
         this.state = {
             message : '',
             key : '',
-            result : ''
+            result : '',
+            fake_result : '',
+            spaced: 'no-space'
         }
         this.fileInput = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,6 +22,7 @@ class Playfair extends Component {
         if(this.fileInput.current.files[0] == null) {
             let cypher = playfairEncrypt(this.state.message, this.state.key);
             this.setState({result: cypher});
+            this.setState({fake_result: cypher});
 
         } else {
             const fr = new FileReader();
@@ -27,10 +30,13 @@ class Playfair extends Component {
                 this.setState({message: fr.result});
                 let cypher = playfairEncrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
             }
             fr.readAsText(this.fileInput.current.files[0]);
 
         }
+
+        this.setState({spaced: 'no-space'});
         
     }
 
@@ -38,12 +44,14 @@ class Playfair extends Component {
         if(this.fileInput.current.files[0] == null) {
             let plainMsg = playfairDecrypt(this.state.message, this.state.key);
             this.setState({result: plainMsg});
+            this.setState({fake_result: plainMsg});
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 this.setState({message: fr.result});
                 let cypher = playfairDecrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
             }
             fr.readAsText(this.fileInput.current.files[0]);
         }
@@ -58,6 +66,17 @@ class Playfair extends Component {
         this.setState({
             [name]: value
         });
+        
+        if (name === 'spaced') this.handleSpace(e);
+    }
+
+    handleSpace = (e) => {
+        if (e.target.value === 'spaced') {
+            let r = this.state.result.replace(/(.{5})/g,"$& ");
+            this.setState({result: r});
+        } else {
+            this.setState({result: this.state.fake_result});
+        }
     }
 
     clearField = () => {
@@ -65,7 +84,7 @@ class Playfair extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result],
+        let blob = new Blob([this.state.fake_result],
                 { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -102,7 +121,12 @@ class Playfair extends Component {
             
             <Form.Label>Output</Form.Label>
             <Form.Control as="textarea" rows={3} placeholder="" readOnly name="result" value={this.state.result}/>
-            <br/>
+            <Container>
+                <Form.Group className="mb-3">                
+                    <Form.Check inline label="No Space" type="radio" value="no-space" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'no-space'}/>
+                    <Form.Check inline label="Spaced" type="radio" value="spaced" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'spaced'}/>
+                </Form.Group>
+            </Container><br/>
             <Button variant="primary" type="button" onClick={this.handleSaveFile}>Download as File</Button>
 
             <Container className="mb-5"></Container>

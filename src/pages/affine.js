@@ -11,7 +11,9 @@ class Affine extends Component {
             message : '',
             key_a : '',
             key_b : '',
-            result : ''
+            result : '',
+            fake_result : '',
+            spaced: 'no-space'
         }
         this.fileInput = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -22,6 +24,7 @@ class Affine extends Component {
         if(this.fileInput.current.files[0] == null) {
             let cypher = affineEncrypt(this.state.message, this.state.key_a, this.state.key_b);
             this.setState({result: cypher});
+            this.setState({fake_result: cypher});
 
         } 
         //handle file input
@@ -31,10 +34,13 @@ class Affine extends Component {
                 this.setState({message: fr.result});
                 let cypher = affineEncrypt(this.state.message, this.state.key_a, this.state.key_b);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});
             }
             fr.readAsText(this.fileInput.current.files[0]);
 
         }
+
+        this.setState({spaced: 'no-space'});
         
     }
 
@@ -43,6 +49,7 @@ class Affine extends Component {
         if(this.fileInput.current.files[0] == null) {
             let plainMsg = affineDecrypt(this.state.message, this.state.key_a, this.state.key_b);
             this.setState({result: plainMsg});
+            this.setState({fake_result: plainMsg});
         } 
         //handle file input
         else {
@@ -51,10 +58,13 @@ class Affine extends Component {
                 this.setState({message: fr.result});
                 let plainMsg = affineDecrypt(fr.result, this.state.key_a, this.state.key_b);
                 this.setState({result: plainMsg});
+                this.setState({fake_result: plainMsg});
             }
             fr.readAsText(this.fileInput.current.files[0]);
         }
         
+        this.setState({spaced: 'no-space'});
+
     }
 
     handleInputChange = (e) => {
@@ -65,6 +75,17 @@ class Affine extends Component {
         this.setState({
             [name]: value
         });
+
+        if (name === 'spaced') this.handleSpace(e);
+    }
+
+    handleSpace = (e) => {
+        if (e.target.value === 'spaced') {
+            let r = this.state.result.replace(/(.{5})/g,"$& ");
+            this.setState({result: r});
+        } else {
+            this.setState({result: this.state.fake_result});
+        }
     }
 
     clearField = () => {
@@ -72,7 +93,7 @@ class Affine extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result],
+        let blob = new Blob([this.state.fake_result],
                 { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -110,7 +131,12 @@ class Affine extends Component {
             
             <Form.Label>Output</Form.Label>
             <Form.Control as="textarea" rows={3} placeholder="" readOnly name="result" value={this.state.result}/>
-            <br/>
+             <Container>
+                <Form.Group className="mb-3">                
+                    <Form.Check inline label="No Space" type="radio" value="no-space" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'no-space'}/>
+                    <Form.Check inline label="Spaced" type="radio" value="spaced" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'spaced'}/>
+                </Form.Group>
+            </Container><br/>
             <Button variant="primary" type="button" onClick={this.handleSaveFile}>Download as File</Button>
 
             <Container className="mb-5"></Container>

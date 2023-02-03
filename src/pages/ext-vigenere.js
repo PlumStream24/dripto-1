@@ -10,7 +10,9 @@ class ExtVigenere extends Component {
         this.state = {
             message : '',
             key : '',
-            result : ''
+            fake_result : '',
+            result : '',
+            spaced: 'no-space'
         }
         this.fileInput = createRef();
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,34 +22,39 @@ class ExtVigenere extends Component {
         if(this.fileInput.current.files[0] == null) {
             let cypher = extVigenereEncrypt(this.state.message, this.state.key);
             this.setState({result: cypher});
+            this.setState({fake_result: cypher});
 
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 let cypher = extVigenereFileEncrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});    
                 
             }
             fr.readAsArrayBuffer(this.fileInput.current.files[0]);
 
         }
-        
+        this.setState({spaced: 'no-space'});
     }
 
     handleDecrypt = () => {
         if(this.fileInput.current.files[0] == null) {
             let plainMsg = extVigenereDecrypt(this.state.message, this.state.key);
             this.setState({result: plainMsg});
+            this.setState({fake_result: plainMsg});
+
         } else {
             const fr = new FileReader();
             fr.onload = () => {
                 let cypher = extVigenereFileDecrypt(fr.result, this.state.key);
                 this.setState({result: cypher});
+                this.setState({fake_result: cypher});    
 
             }
             fr.readAsArrayBuffer(this.fileInput.current.files[0]);
         }
-        
+        this.setState({spaced: 'no-space'});   
     }
 
     handleInputChange = (e) => {
@@ -58,6 +65,8 @@ class ExtVigenere extends Component {
         this.setState({
             [name]: value
         });
+
+        if (name === 'spaced') this.handleSpace(e);
     }
 
     clearField = () => {
@@ -65,7 +74,7 @@ class ExtVigenere extends Component {
     }
 
     handleSaveFile = () => {
-        let blob = new Blob([this.state.result]);
+        let blob = new Blob([this.state.fake_result]);
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         if (this.fileInput.current.value == null) {
@@ -105,7 +114,12 @@ class ExtVigenere extends Component {
             
             <Form.Label>Output</Form.Label>
             <Form.Control as="textarea" rows={3} placeholder="" readOnly name="result" value={this.state.result}/>
-            <br/>
+            <Container>
+                <Form.Group className="mb-3">                
+                    <Form.Check inline label="No Space" type="radio" value="no-space" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'no-space'}/>
+                    <Form.Check inline label="Spaced" type="radio" value="spaced" name="spaced" onChange={this.handleInputChange} checked={this.state.spaced === 'spaced'}/>
+                </Form.Group>
+            </Container><br/>
             <Button variant="primary" type="button" onClick={this.handleSaveFile}>Download as File</Button>
 
             <Container className="mb-5"></Container>
