@@ -3,16 +3,23 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {Component, createRef} from 'react';
 import {hillEncrypt, hillDecrypt} from "../functions/hill";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 class Hill extends Component {
     constructor(props) {
         super(props);
         this.state = {
             message : '',
-            key_a : '',
-            key_b : '',
-            key_c : '',
-            key_d : '',
+            key_a : 656,
+            key_b : 414,
+            key_c : 443,
+            key_d : 637,
+            key_e : 434,
+            key_f : 374,
+            key_g : 644,
+            key_h : 485,
+            key_i : 483,
             result : ''
         }
         this.fileInput = createRef();
@@ -88,14 +95,51 @@ class Hill extends Component {
                     <Form.Control type="file" accept=".txt" ref={this.fileInput}/>
                     <Button variant="outline-secondary" size="sm" type="button" onClick={this.clearField} className="mt-1 mb-4">Clear</Button>
                     <br/>
-                    <Form.Label>a</Form.Label>
-                    <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_a" value={this.state.key_a} onChange={this.handleInputChange}></Form.Control>
-                    <Form.Label>b</Form.Label>
-                    <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_b" value={this.state.key_b} onChange={this.handleInputChange}></Form.Control>
-                    <Form.Label>c</Form.Label>
-                    <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_c" value={this.state.key_c} onChange={this.handleInputChange}></Form.Control>
-                    <Form.Label>d</Form.Label>
-                    <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_d" value={this.state.key_d} onChange={this.handleInputChange}></Form.Control>
+                    <Form.Label>Key</Form.Label>
+                    <Container>
+                        <Row xs={3}>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_a" value={this.state.key_a} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_b" value={this.state.key_b} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_c" value={this.state.key_c} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                        </Row>
+                        <Row xs={3}>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_d" value={this.state.key_d} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_e" value={this.state.key_e} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_f" value={this.state.key_f} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                        </Row>
+                        <Row xs={3}>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_g" value={this.state.key_g} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_h" value={this.state.key_h} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                            <Col>
+                                <Form.Label></Form.Label>
+                                <Form.Control type="number" pattern="[0-9]*" placeholder="" name="key_i" value={this.state.key_i} onChange={this.handleInputChange}></Form.Control>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Form.Group>
 
                 <Container className="d-flex gap-3">

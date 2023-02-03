@@ -45,3 +45,7 @@ body {
 .drip {
   background-image: url("./dripto.jpg");
 }
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
