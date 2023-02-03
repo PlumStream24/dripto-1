@@ -80,7 +80,7 @@ const hillDecrypt = function(plainMsg, key_a, key_b, key_c, key_d, key_e, key_f,
         let currentLetterMatrix = math.matrix([plainMsg[i].codePointAt(), plainMsg[i+1].codePointAt(), plainMsg[i+2].codePointAt()]);
         let cypherMatrix = math.multiply(inverseKeyMatrix, currentLetterMatrix);
         cypherMatrix = math.mod(cypherMatrix, 256);
-        cypher += String.fromCodePoint(math.round(cypherMatrix.get([0]))) + String.fromCodePoint(math.round(cypherMatrix.get([1]))) + String.fromCodePoint(math.round(cypherMatrix.get([2])));
+        cypher += String.fromCodePoint(cypherMatrix.get([0])) + String.fromCodePoint(cypherMatrix.get([1])) + String.fromCodePoint(cypherMatrix.get([2]));
     }
 
     return cypher;
